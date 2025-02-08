@@ -44,3 +44,7 @@ tmp_dir = "tmp"
 [screen]
   clear_on_rebuild = false
   keep_scroll = true
+
+[watcher]
+  include = ["cmd/", "internal/", "server/"]
+  exclude = ["tmp", "vendor"]
