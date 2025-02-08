@@ -46,5 +46,5 @@ tmp_dir = "tmp"
   keep_scroll = true
 
 [watcher]
-  include = ["cmd/", "internal/", "server/"]
-  exclude = ["tmp", "vendor"]
+include = ["cmd/", "internal/", "pkg/"]
+exclude = ["tmp", "vendor"]
