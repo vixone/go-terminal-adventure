@@ -1,0 +1,81 @@
+package web
+
+templ TerminalAdventurePage() {
+@Base() {
+<div class="relative w-full h-full flex flex-col bg-[#24273A] p-4 font-mono" onclick="focusInput()">
+
+  <!-- Terminal Output Area -->
+  <div id="terminal-output" class="flex-1 overflow-auto text-lg leading-relaxed">
+    <div id="terminal-text">
+      <div>Welcome to the room!</div>
+      <div>Type 'help' for commands.</div>
+    </div>
+
+    <!-- User Input (Inline with Terminal Output) -->
+    <div class="flex items-center mt-2">
+      <span class="text-[#8AADF4] mr-2">$</span>
+      <input id="user-input" type="text" class="bg-transparent text-[#A6DA95] border-none outline-none p-1 pl-0 w-full"
+        autofocus onkeyup="processCommand(event)" />
+    </div>
+  </div>
+</div>
+
+<!-- JavaScript Logic -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const terminalOutput = document.getElementById("terminal-output");
+    const terminalText = document.getElementById("terminal-text");
+    const userInput = document.getElementById("user-input");
+
+    const responses = {
+      help: "Available commands: start, look, inventory, quit",
+      start: "Surrounded by white walls, you see 3 doors in front of you.",
+      look: "It's too dark to see anything.",
+      inventory: "You have nothing.",
+      quit: "Thanks for playing!",
+    };
+
+    function processCommand(event) {
+      if (event.key !== "Enter") return;
+
+      let cmd = userInput.value.trim().toLowerCase();
+      if (!cmd) return;
+
+      // Append user command as static text
+      let commandLine = document.createElement("div");
+      commandLine.classList.add("mt-2", "text-[#CAD3F5]");
+      commandLine.innerText = `$ ${cmd}`;
+      terminalText.appendChild(commandLine);
+
+      // Process response
+      let responseLine = document.createElement("div");
+      responseLine.classList.add("mt-2", "text-[#A6DA95]");
+      responseLine.innerText = responses[cmd] || "Unknown command.";
+      terminalText.appendChild(responseLine);
+
+      // Move input field to the latest line
+      terminalOutput.appendChild(document.querySelector(".flex.items-center"));
+
+      // Clear input field
+      userInput.value = "";
+
+      // Auto-scroll to bottom
+      terminalOutput.scrollTop = terminalOutput.scrollHeight;
+
+      // Re-focus input field
+      setTimeout(() => userInput.focus(), 10);
+    }
+
+    function focusInput() {
+      userInput.focus();
+    }
+
+    window.focusInput = focusInput;
+    window.processCommand = processCommand;
+
+    // Ensure input is always focused
+    userInput.addEventListener("blur", () => setTimeout(() => userInput.focus(), 10));
+  });
+</script>
+}
+}

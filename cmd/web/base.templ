@@ -12,8 +12,9 @@ templ Base() {
   <script src="assets/js/htmx.min.js"></script>
 </head>
 
-<body class="h-screen w-screen flex items-center justify-center bg-[#24273A] text-[#CAD3F5] font-mono">
-  <main class="w-full max-w-2xl bg-[#1E1E2E] shadow-lg rounded-lg p-6 border border-[#A5ADCB]">
+<body class="w-screen h-screen bg-[#24273A] text-[#CAD3F5] font-mono p-4 overflow-hidden">
+  <!-- Removed flex centering here -->
+  <main class="h-full overflow-y-auto">
     { children... }
   </main>
 </body>

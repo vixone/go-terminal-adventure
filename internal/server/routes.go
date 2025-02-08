@@ -2,11 +2,14 @@ package server
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 
-	"github.com/a-h/templ"
 	"go-terminal-adventure/cmd/web"
+
+	"github.com/a-h/templ"
+	"github.com/google/uuid"
 )
 
 func (s *Server) RegisterRoutes() http.Handler {
@@ -14,6 +17,8 @@ func (s *Server) RegisterRoutes() http.Handler {
 
 	// Register routes
 	mux.HandleFunc("/", s.HelloWorldHandler)
+	mux.HandleFunc("/login", s.LoginHandler)
+	mux.HandleFunc("/onwards", s.AdventureHandler)
 
 	mux.HandleFunc("/health", s.healthHandler)
 
@@ -56,6 +61,15 @@ func (s *Server) HelloWorldHandler(w http.ResponseWriter, r *http.Request) {
 	if _, err := w.Write(jsonResp); err != nil {
 		log.Printf("Failed to write response: %v", err)
 	}
+}
+func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
+	userUUID := uuid.New().String()
+	templ.Handler(web.LoginForm(userUUID)).ServeHTTP(w, r)
+}
+
+func (s *Server) AdventureHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("******HERE****", r.URL)
+	templ.Handler(web.TerminalAdventurePage()).ServeHTTP(w, r)
 }
 
 func (s *Server) healthHandler(w http.ResponseWriter, r *http.Request) {
