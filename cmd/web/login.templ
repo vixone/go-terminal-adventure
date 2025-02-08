@@ -1,0 +1,40 @@
+package web
+
+templ LoginForm() {
+@Base() {
+<div class="flex flex-col items-center justify-center h-full w-full">
+  <form hx-post="/hello" method="POST" hx-target="#hello-container"
+    class="bg-[#1E1E2E] p-6 rounded-lg shadow-md border border-[#A5ADCB] max-w-sm w-full">
+
+    <!-- Animated Terminal Title -->
+    <h1 class="text-xl font-bold text-[#F4DBD6] text-center mb-4">
+      <span id="typing-text">Enter Your Seed Key</span><span class="blinking-cursor">|</span>
+    </h1>
+
+    <input id="seed" name="seed" type="text"
+      class="w-full p-3 bg-[#363A4F] text-[#CAD3F5] rounded-md border border-[#A5ADCB] focus:outline-none focus:ring-2 focus:ring-[#F4DBD6]"
+      placeholder="Enter your seed..." required />
+
+    <button type="submit" class="w-full mt-4 p-3 bg-[#8AADF4] text-[#1E1E2E] font-bold rounded-md hover:bg-[#7AA2F7]">
+      Continue Adventure
+    </button>
+  </form>
+
+  <div class="text-center mt-4">
+    <a href="/new-game" class="text-[#F5A97F] hover:underline">No seed key? Start new adventure</a>
+  </div>
+
+  <div id="hello-container" class="mt-4 text-center"></div>
+</div>
+
+<!-- Blinking Cursor and Typing Animation Script -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const cursor = document.querySelector(".blinking-cursor");
+    setInterval(() => {
+      cursor.style.visibility = (cursor.style.visibility === "hidden") ? "visible" : "hidden";
+    }, 500);
+  });
+</script>
+}
+}
