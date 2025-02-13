@@ -10,6 +10,8 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/source/file"
 	_ "github.com/joho/godotenv/autoload"
 )
 
@@ -57,6 +59,9 @@ func New() Service {
 	dbInstance = &service{
 		db: db,
 	}
+
+	MigrateDB()
+
 	return dbInstance
 }
 
@@ -108,6 +113,29 @@ func (s *service) Health() map[string]string {
 	}
 
 	return stats
+}
+func MigrateDB() {
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?multiStatements=true",
+		os.Getenv("BLUEPRINT_DB_USERNAME"),
+		os.Getenv("BLUEPRINT_DB_PASSWORD"),
+		os.Getenv("BLUEPRINT_DB_HOST"),
+		os.Getenv("BLUEPRINT_DB_PORT"),
+		os.Getenv("BLUEPRINT_DB_DATABASE"),
+	)
+
+	m, err := migrate.New(
+		"file://migrations",
+		"mysql://"+dsn,
+	)
+	if err != nil {
+		log.Fatalf("Migration init failed: %v", err)
+	}
+
+	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+		log.Fatalf("Migration failed: %v", err)
+	}
+
+	log.Println("Database migrated successfully!")
 }
 
 // Close closes the database connection.

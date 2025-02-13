@@ -68,7 +68,6 @@ func (s *Server) LoginHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) AdventureHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("******HERE****", r.URL)
 	templ.Handler(web.TerminalAdventurePage()).ServeHTTP(w, r)
 }
 
